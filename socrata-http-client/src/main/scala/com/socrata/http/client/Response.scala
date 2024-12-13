@@ -171,9 +171,15 @@ object Response {
   private val textPlain = new MimeType("text/plain")
 
   def subTypeSubSequence(pattern: MimeType, candidate: MimeType): Boolean = {
-    val candidateSubType = candidate.getSubType.split("\\+").toSet
-    val patternSubType = pattern.getSubType.split("\\+").toSet
-    patternSubType.subsetOf(candidateSubType)
+    val candidateSubType = candidate.getSubType.split("\\+").toList
+    val patternSubType = pattern.getSubType.split("\\+").toList
+
+    (patternSubType, candidateSubType) match {
+      case (pHead :: patternRest, cHead :: candidateRest) if pHead == cHead=>
+        patternRest.toSet.subsetOf(candidateRest.toSet)
+      case _ => false
+    }
+
   }
 
 

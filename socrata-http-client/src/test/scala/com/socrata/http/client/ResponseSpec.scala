@@ -17,10 +17,13 @@ class ResponseTest extends FunSuite with MustMatchers {
       ("foo/bar+baz", "foo/bar+baz", true),
       ("foo/bar+baz", "foo/bar", false),
       ("goo/bar", "foo/bar", false),
+      ("foo/baz+bar", "foo/bar+baz", false),
       ("application/json", "application/json+cjson", true),
       ("application/json+cjson", "application/json", false),
+      ("application/json+cjson", "application/json", false),
     ).foreach { case (pattern, candidate, matches) =>
-        println(pattern, candidate, matches)
+        val allowString = if (matches) "allows" else "denies"
+        println(s"$pattern $allowString $candidate")
         Response.matches(new MimeType(pattern), new MimeType(candidate)) must be (matches)
 
     }
