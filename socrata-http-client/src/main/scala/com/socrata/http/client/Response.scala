@@ -171,7 +171,7 @@ object Response {
   private val textPlain = new MimeType("text/plain")
 
   def matches(pattern: MimeType, candidate: MimeType): Boolean =
-    pattern.getPrimaryType == candidate.getPrimaryType && (pattern.getSubType == "*" || pattern.getSubType == candidate.getSubType)
+    pattern.getPrimaryType == candidate.getPrimaryType && (pattern.getSubType == "*" || candidate.getSubType.startsWith(pattern.getSubType))
 
   def acceptJson(mimeType: Option[MimeType]) = mimeType.fold(false)(matches(appJson, _))
   def acceptGeoJson(mimeType: Option[MimeType]) = mimeType.fold(false) { mt =>
