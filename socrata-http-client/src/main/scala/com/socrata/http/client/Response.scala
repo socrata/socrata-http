@@ -173,7 +173,7 @@ object Response {
   def subTypeSubSequence(pattern: MimeType, candidate: MimeType): Boolean = {
     val candidateSubType = candidate.getSubType.split("\\+").toSet
     val patternSubType = pattern.getSubType.split("\\+").toSet
-    candidateSubType.subsetOf(patternSubType)
+    patternSubType.subsetOf(candidateSubType)
   }
 
 
