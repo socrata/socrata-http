@@ -170,8 +170,15 @@ object Response {
   private val appGeoJson = new MimeType("application/vnd.geo+json")
   private val textPlain = new MimeType("text/plain")
 
+  def subTypeSubSequence(pattern: MimeType, candidate: MimeType): Boolean = {
+    val candidateSubType = candidate.getSubType.split("\\+").toSet
+    val patternSubType = pattern.getSubType.split("\\+").toSet
+    candidateSubType.subsetOf(patternSubType)
+  }
+
+
   def matches(pattern: MimeType, candidate: MimeType): Boolean =
-    pattern.getPrimaryType == candidate.getPrimaryType && (pattern.getSubType == "*" || candidate.getSubType.startsWith(pattern.getSubType))
+    pattern.getPrimaryType == candidate.getPrimaryType && (pattern.getSubType == "*" || subTypeSubSequence(pattern, candidate))
 
   def acceptJson(mimeType: Option[MimeType]) = mimeType.fold(false)(matches(appJson, _))
   def acceptGeoJson(mimeType: Option[MimeType]) = mimeType.fold(false) { mt =>
